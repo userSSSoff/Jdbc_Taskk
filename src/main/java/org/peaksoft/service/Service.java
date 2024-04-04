@@ -1,12 +1,13 @@
 package org.peaksoft.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface Service<T> {
 
     void createTable();
 
-    void dropTable();
+    void dropTable() throws SQLException;
 
     void save(T t);
 

@@ -8,6 +8,9 @@ public class Car {
     private LocalDate yearOfRelease;
     private String color;
 
+    public Car() {
+    }
+
     public Car(String model, LocalDate yearOfRelease, String color) {
         this.model = model;
         this.yearOfRelease = yearOfRelease;
@@ -45,4 +48,6 @@ public class Car {
     public void setColor(String color) {
         this.color = color;
     }
+
+
 }
