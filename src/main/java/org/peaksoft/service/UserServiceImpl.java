@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserServiceImpl implements Service<User> {
-    UserServiceImpl userService = new UserServiceImpl();
-
     public void createTable() {
         String query = """
                 CREATE TABLE IF NOT EXISTS users (
@@ -38,11 +36,10 @@ public class UserServiceImpl implements Service<User> {
         statement.close();
         System.out.println("Udelano!");
     }
-
     public void save(User user) {
         String query = """
-                INSERT INTO users(NAME, LAST_NAME, AGE, CARDID)
-                VALUES (?,?,?,?);
+                INSERT INTO users(name,last_name,age,cardId)
+                VALUES (?,?,?,?)
                 """;
         try (Connection connection = Util.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -90,24 +87,21 @@ public class UserServiceImpl implements Service<User> {
             System.out.println(e.getMessage());
         }
         return usersList;
-
     }
-
     public void cleanTable() {
-try {
-    userService.save(new User());
-    userService.getAll();
-    userService.dropTable();
-    userService.cleanTable();
-    if (!userService.getAll().isEmpty()){
-        System.out.println("Здраствуйте)");
-    }
-}catch (Exception e){
-    System.out.println(e.getMessage());
-}
-    }
-
-    public User getById(long id) {
+        String query = """
+                DELETE FROM users;
+                """;
+        try (Connection connection = Util.getConnection()) {
+            Statement statement = connection.createStatement();
+            statement.execute(query);
+            System.out.println("Table cleaned");
+        }
+         catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        public User getById(long id) {
         String query = """
                 SELECT * FROM users WHERE  id = ?
                 """;

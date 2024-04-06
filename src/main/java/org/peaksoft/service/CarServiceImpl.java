@@ -11,8 +11,6 @@ import java.util.List;
 import static org.peaksoft.util.Util.getConnection;
 
 public class CarServiceImpl implements Service<Car> {
-    CarServiceImpl carService = new CarServiceImpl();
-
     public void createTable() {
         String query = """
                     CREATE TABLE IF NOT EXISTS cars(
@@ -34,7 +32,7 @@ public class CarServiceImpl implements Service<Car> {
     public void dropTable() throws SQLException {
         Connection connection = Util.getConnection();
         Statement statement = connection.createStatement();
-        statement.execute("DROP TABLE car");
+        statement.execute("DROP TABLE cars ");
         connection.close();
         System.out.println("Udelano!");
     }
@@ -58,7 +56,7 @@ public class CarServiceImpl implements Service<Car> {
     }
 
     public void removeById(long id) {
-        String query = "DELETE FROM  cars WHERE id = ?";
+        String query = "DELETE FROM  cars WHERE id = ? ";
         try (Connection connection = Util.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setLong(1, id);
@@ -91,17 +89,16 @@ public class CarServiceImpl implements Service<Car> {
 
 
     public void cleanTable() {
-        try {
-            carService.save(new Car());
-            carService.getAll();
-            carService.dropTable();
-            carService.cleanTable();
-            if (!carService.getAll().isEmpty()) {
-                System.out.println("Здраствуйте)");
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+String query = """
+        DELETE FROM cars;
+        """;
+try(Connection connection = Util.getConnection()){
+    Statement statement = connection.createStatement();
+    statement.execute(query);
+    System.out.println("Table cleaned");
+}catch (SQLException e ){
+    System.out.println(e.getMessage());
+}
     }
 
     public Car getById(long id) {
@@ -116,7 +113,7 @@ public class CarServiceImpl implements Service<Car> {
             while (resultSet.next()) {
                 car.setId(resultSet.getLong("id"));
                 car.setModel(resultSet.getString("model"));
-                car.setYearOfRelease((LocalDate) resultSet.getObject("yerarOfRelease"));
+                car.setYearOfRelease((LocalDate) resultSet.getObject("yearOfRelease"));
                 car.setColor(resultSet.getString("color"));
             }
         } catch (SQLException e) {

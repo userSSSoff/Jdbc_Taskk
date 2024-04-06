@@ -1,7 +1,9 @@
 package org.peaksoft;
 
 import org.peaksoft.model.Car;
+import org.peaksoft.model.User;
 import org.peaksoft.service.CarServiceImpl;
+import org.peaksoft.service.UserServiceImpl;
 
 import java.time.LocalDate;
 
@@ -14,5 +16,10 @@ public class Main {
 //                ,01,1),"White"));
 //        Car car = carService.removeById();
 carService.removeById(2);
+        UserServiceImpl userService = new UserServiceImpl();
+        userService.createTable();
+       userService.save(new User("Nurmuhammed"
+               ,"Akbaraliev",(byte)17, 161616L));
+       userService.cleanTable();
     }
 }
